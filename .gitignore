@@ -1,0 +1,11 @@
+.env
+*.env.*
+*_api_key*
+*.secret
+credentials.*
+.DS_Store
+__pycache__/
+*.pyc
+node_modules/
+export.xml
+apple_health_export/
