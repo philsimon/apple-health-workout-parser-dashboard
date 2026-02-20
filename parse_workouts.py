@@ -10,12 +10,10 @@ Columns:
   calories     - active energy burned in Cal from WorkoutStatistics (blank if not recorded)
 """
 
+import argparse
 import csv
 import xml.etree.ElementTree as ET
 from pathlib import Path
-
-INPUT_XML = Path("/Users/PhilSimon2/Desktop/apple_health_export/export.xml")
-OUTPUT_CSV = Path("/Users/PhilSimon2/Desktop/workouts.csv")
 
 # Map stat type identifiers to column names
 STAT_MAP = {
@@ -30,6 +28,14 @@ def clean_type(raw: str) -> str:
     return raw.replace("HKWorkoutActivityType", "")
 
 def main():
+    parser = argparse.ArgumentParser(description="Extract workouts from Apple Health export.xml to CSV.")
+    parser.add_argument("input_xml", help="Path to Apple Health export.xml")
+    parser.add_argument("output_csv", help="Path for the output CSV file")
+    args = parser.parse_args()
+
+    INPUT_XML = Path(args.input_xml)
+    OUTPUT_CSV = Path(args.output_csv)
+
     rows = []
     workout_count = 0
 
