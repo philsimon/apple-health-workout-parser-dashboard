@@ -9,3 +9,4 @@ __pycache__/
 node_modules/
 export.xml
 apple_health_export/
+workouts.csv
