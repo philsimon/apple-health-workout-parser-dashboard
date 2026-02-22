@@ -45,6 +45,11 @@ License: MIT
     background: var(--bg); color: var(--text); border: 1px solid var(--border);
     padding: 6px 10px; font-family: 'DM Mono', monospace; font-size: 0.8rem;
     border-radius: 2px; cursor: pointer; min-width: 140px;
+    outline: none; -webkit-appearance: none; appearance: none;
+    color-scheme: dark;
+  }
+  .filters select:focus, .filters input[type=date]:focus {
+    border-color: var(--accent);
   }
   #reset-btn {
     background: transparent; border: 1px solid var(--accent); color: var(--accent);
@@ -52,6 +57,12 @@ License: MIT
     cursor: pointer; border-radius: 2px; align-self: flex-end;
   }
   #reset-btn:hover { background: var(--accent); color: var(--bg); }
+  .filters input[type=date]::-webkit-calendar-picker-indicator {
+    background-color: var(--accent);
+    border-radius: 2px;
+    padding: 3px;
+    cursor: pointer;
+  }
   .main { padding: 24px 32px; display: grid; gap: 20px; }
   .stats-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
   .stat-card { background: var(--card); border: 1px solid var(--border); padding: 16px 20px; border-radius: 2px; }
@@ -181,107 +192,7 @@ function parseRow(r) {
   };
 }
 
-const __csvData = "type,date,duration_min,distance_mi,calories
-Tennis,2023-01-02 22:21:34 -0700,50.01,1.61233,373.468
-Tennis,2023-01-04 01:14:49 -0700,85.15,0.63041,426.577
-CoreTraining,2023-01-08 17:22:38 -0700,17.04,,76.125
-HighIntensityIntervalTraining,2023-01-13 16:32:52 -0700,20.51,,267.853
-Cycling,2023-01-15 20:57:59 -0700,26.39,11.33922,311.149
-Walking,2023-01-20 00:15:23 -0700,38.35,2.03194,573.747
-Tennis,2023-01-21 09:28:17 -0700,65.67,0.68724,576.689
-Tennis,2023-01-25 20:17:42 -0700,72.83,1.79256,473.206
-Running,2023-01-31 04:33:14 -0700,50.92,7.91133,627.659
-HighIntensityIntervalTraining,2023-02-03 00:13:57 -0700,30.89,,222.966
-TraditionalStrengthTraining,2023-02-04 10:36:39 -0700,61.58,,320.887
-CoreTraining,2023-02-07 12:04:57 -0700,19.58,,36.34
-Tennis,2023-02-12 06:36:57 -0700,75.97,0.82942,397.285
-Cycling,2023-02-14 11:35:28 -0700,21.28,9.7318,307.096
-Tennis,2023-02-20 02:05:24 -0700,59.16,1.48316,418.69
-TraditionalStrengthTraining,2023-02-23 21:14:58 -0700,36.28,,336.247
-HighIntensityIntervalTraining,2023-02-26 03:33:11 -0700,37.45,,229.88
-CoreTraining,2023-03-03 09:48:09 -0700,14.87,,95.578
-Running,2023-03-06 11:34:25 -0700,51.68,4.53296,231.764
-CoreTraining,2023-03-12 06:44:49 -0700,10.03,,75.323
-Walking,2023-03-16 10:19:54 -0700,91.35,4.45334,283.413
-HighIntensityIntervalTraining,2023-03-21 03:18:03 -0700,18.95,,150.649
-CoreTraining,2023-03-22 17:49:19 -0700,20.24,,70.768
-Cycling,2023-03-27 14:33:34 -0700,45.56,14.13455,261.136
-Cycling,2023-03-30 23:51:48 -0700,56.9,18.7774,439.578
-TraditionalStrengthTraining,2023-04-02 11:06:45 -0700,69.54,,357.916
-CoreTraining,2023-04-05 19:50:48 -0700,23.94,,28.565
-Cycling,2023-04-11 12:27:34 -0700,41.31,6.88641,463.9
-CoreTraining,2023-04-13 15:06:39 -0700,22.45,,62.314
-Tennis,2023-04-17 23:57:14 -0700,76.04,1.56942,419.698
-CoreTraining,2023-04-19 05:45:47 -0700,14.03,,44.791
-CoreTraining,2023-04-20 16:04:08 -0700,9.6,,42.022
-Running,2023-04-24 05:26:19 -0700,22.7,2.18848,365.214
-HighIntensityIntervalTraining,2023-04-29 23:07:35 -0700,20.36,,176.462
-HighIntensityIntervalTraining,2023-05-02 22:32:23 -0700,21.07,,244.595
-Tennis,2023-05-07 16:04:08 -0700,64.4,1.13537,440.107
-Tennis,2023-05-12 22:57:42 -0700,49.43,1.10393,401.791
-Running,2023-05-16 09:43:26 -0700,41.45,2.84109,291.744
-Walking,2023-05-17 19:47:25 -0700,69.88,6.23742,425.163
-Cycling,2023-05-20 00:35:39 -0700,20.59,6.39894,501.426
-HighIntensityIntervalTraining,2023-05-21 07:54:15 -0700,20.34,,230.208
-HighIntensityIntervalTraining,2023-05-24 15:02:36 -0700,21.63,,306.814
-Tennis,2023-05-26 09:23:57 -0700,89.79,1.33365,515.522
-Walking,2023-05-27 17:45:51 -0700,82.13,4.48207,523.988
-CoreTraining,2023-05-29 01:38:12 -0700,23.39,,73.113
-Cycling,2023-05-31 04:34:49 -0700,27.43,13.92553,470.085
-CoreTraining,2023-06-04 07:25:17 -0700,9.92,,79.452
-CoreTraining,2023-06-06 16:43:54 -0700,16.3,,51.637
-TraditionalStrengthTraining,2023-06-11 01:08:04 -0700,40.74,,248.946
-TraditionalStrengthTraining,2023-06-12 03:58:46 -0700,71.81,,383.934
-CoreTraining,2023-06-14 05:08:57 -0700,24.92,,27.326
-TraditionalStrengthTraining,2023-06-17 00:26:20 -0700,69.64,,369.818
-Cycling,2023-06-22 02:27:52 -0700,41.73,9.53776,593.541
-Tennis,2023-06-27 17:56:31 -0700,81.77,0.94907,499.017
-Walking,2023-06-30 03:00:59 -0700,110.07,5.58329,227.724
-TraditionalStrengthTraining,2023-07-02 11:37:32 -0700,39.16,,308.559
-Cycling,2023-07-03 16:55:02 -0700,22.03,14.51427,531.739
-Running,2023-07-07 11:41:06 -0700,45.48,3.57173,570.615
-Walking,2023-07-09 03:47:16 -0700,40.07,6.69778,495.51
-TraditionalStrengthTraining,2023-07-10 18:55:51 -0700,56.21,,187.023
-Cycling,2023-07-15 06:46:50 -0700,58.89,5.59842,343.124
-TraditionalStrengthTraining,2023-07-18 09:16:11 -0700,65.11,,371.034
-Running,2023-07-23 08:19:06 -0700,57.03,3.42042,281.251
-HighIntensityIntervalTraining,2023-07-26 03:45:56 -0700,15.62,,297.313
-Cycling,2023-07-28 01:04:37 -0700,46.8,16.02586,299.267
-HighIntensityIntervalTraining,2023-07-30 06:40:07 -0700,36.8,,321.719
-HighIntensityIntervalTraining,2023-08-04 14:33:54 -0700,23.74,,314.107
-Tennis,2023-08-10 10:15:59 -0700,53.69,0.99239,559.306
-Tennis,2023-08-13 00:10:12 -0700,67.92,1.51928,553.098
-TraditionalStrengthTraining,2023-08-15 06:40:35 -0700,38.04,,390.634
-HighIntensityIntervalTraining,2023-08-18 14:56:56 -0700,23.64,,307.286
-Walking,2023-08-23 02:00:48 -0700,64.67,4.67123,277.361
-Cycling,2023-08-27 10:40:27 -0700,41.54,15.79145,496.78
-Walking,2023-08-31 17:01:42 -0700,115.4,6.56424,461.578
-TraditionalStrengthTraining,2023-09-03 10:21:13 -0700,52.82,,316.723
-CoreTraining,2023-09-09 05:15:40 -0700,7.55,,62.045
-Running,2023-09-10 05:01:53 -0700,44.62,3.8057,473.969
-HighIntensityIntervalTraining,2023-09-12 20:21:07 -0700,34.64,,271.332
-Tennis,2023-09-17 18:53:35 -0700,54.62,1.20978,570.354
-Walking,2023-09-19 09:48:41 -0700,55.54,5.1512,459.63
-Running,2023-09-20 12:12:42 -0700,46.91,3.34784,299.565
-HighIntensityIntervalTraining,2023-09-23 22:10:42 -0700,30.28,,303.698
-CoreTraining,2023-09-27 08:58:03 -0700,8.89,,89.635
-Tennis,2023-10-02 21:53:38 -0700,75.94,1.83899,558.132
-Running,2023-10-04 03:24:55 -0700,27.04,7.7478,458.979
-Cycling,2023-10-07 20:30:17 -0700,24.85,7.00009,385.857
-TraditionalStrengthTraining,2023-10-12 00:20:19 -0700,72.75,,372.856
-CoreTraining,2023-10-15 04:48:11 -0700,13.53,,110.685
-Cycling,2023-10-19 11:55:03 -0700,38.99,8.88787,298.896
-CoreTraining,2023-10-22 18:59:00 -0700,14.69,,43.925
-Running,2023-10-24 10:58:33 -0700,30.87,3.91826,470.076
-Tennis,2023-10-27 03:28:38 -0700,51.88,0.82093,424.46
-Walking,2023-10-31 03:44:23 -0700,48.62,3.81079,602.419
-Cycling,2023-11-05 20:39:38 -0700,55.23,13.63536,390.792
-HighIntensityIntervalTraining,2023-11-09 01:25:41 -0700,36.34,,340.686
-CoreTraining,2023-11-12 11:39:12 -0700,21.0,,109.781
-HighIntensityIntervalTraining,2023-11-16 21:34:34 -0700,15.73,,217.226
-Running,2023-11-20 17:06:45 -0700,53.62,7.51725,690.361
-CoreTraining,2023-11-24 21:03:24 -0700,16.29,,22.71
-HighIntensityIntervalTraining,2023-11-27 13:04:02 -0700,19.54,,202.031";
+const __csvData = "type,date,duration_min,distance_mi,calories";
 
 (function() {
   const result = Papa.parse(__csvData, { header: true, skipEmptyLines: true });
@@ -315,8 +226,13 @@ HighIntensityIntervalTraining,2023-11-27 13:04:02 -0700,19.54,,202.031";
 
   ['f-type','f-dow','f-year'].forEach(id =>
     document.getElementById(id).addEventListener('change', () => applyFilters()));
-  ['f-start','f-end'].forEach(id =>
-    document.getElementById(id).addEventListener('input', () => applyFilters()));
+  ['f-start','f-end'].forEach(id => {
+    document.getElementById(id).addEventListener('input', () => {
+      const val = document.getElementById(id).value;
+      if (val.length === 10) applyFilters();
+    });
+    document.getElementById(id).addEventListener('change', () => applyFilters());
+  });
   document.getElementById('reset-btn').addEventListener('click', resetFilters);
 
   applyFilters(true);
